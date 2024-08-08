@@ -134,6 +134,6 @@ PAYPAL_TEST = True
 
 # Twilio configuration
 TWILIO_ACCOUNT_SID = 'AC0629dcfce3bbeb8f797a266b387b179c'
-TWILIO_AUTH_TOKEN = 'eba5261d2a85a5db9e261e75b17ebf1e'
+
 TWILIO_PHONE_NUMBER = '+9203303193377'  # Your Twilio number
 
