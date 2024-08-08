@@ -126,7 +126,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 PAYPAL_CLIENT_ID = 'AbCrQe5LkA9rpCjLwuCHR-NJp9WUNbFfc4r3NzSQfR75hpZvTkBWjWR2qLGXZwArmV6XsdBVus-eIurJ'
-PAYPAL_CLIENT_SECRET = 'EAG95NrtN6xsQPPxIJmDAv5xyUtt9WpQfOssW7ltzGAjZC0R0hzjqKM99JL2fi4ezGwG3IWTxL4nt4WV'
+
 PAYPAL_MODE = 'sandbox'  # Or 'live'
 
 PAYPAL_RECEIVER_EMAIL ='sb-nf4ku32054043@business.example.com'
