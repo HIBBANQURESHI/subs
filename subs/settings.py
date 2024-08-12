@@ -132,3 +132,4 @@ PAYPAL_MODE = 'sandbox'  # Or 'live'
 PAYPAL_RECEIVER_EMAIL ='sb-nf4ku32054043@business.example.com'
 PAYPAL_TEST = True 
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

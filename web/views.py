@@ -4,24 +4,26 @@ import paypalrestsdk
 from django.urls import reverse
 from django.conf import settings
 from paypal.standard.forms import PayPalPaymentsForm
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 
 def subscribe(request):
     if request.method == "POST":
         plan_id = request.POST.get('plan_id')
-        print(f"Received plan_id: {plan_id}")  # Debug print
+        print(f"Received plan_id: {plan_id}")  
         
         try:
             plan = SubscriptionPlan.objects.get(id=plan_id)
-            print(f"Found plan: {plan}")  # Debug print
+            print(f"Found plan: {plan}")  
         except SubscriptionPlan.DoesNotExist:
-            print("Plan does not exist")  # Debug print
+            print("Plan does not exist")  
             return redirect('subscription_error')
         
-        # Create a new subscription for the user
+        # Creating a new subscription for the user
         user_subscription = UserSubscription.objects.create(user=request.user, plan=plan)
         
-        # Create a PayPal payment
+        # Creating a PayPal payment
         payment = paypalrestsdk.Payment({
             "intent": "sale",
             "payer": {"payment_method": "paypal"},
@@ -48,17 +50,17 @@ def subscribe(request):
         })
         
         if payment.create():
-            print(f"Payment created successfully: {payment}")  # Debug print
-            # Find the approval URL and redirect to PayPal
+            print(f"Payment created successfully: {payment}")  
+           
             for link in payment.links:
                 if link.rel == "approval_url":
                     return redirect(link.href)
         else:
-            # Handle payment creation errors
-            print(f"Payment creation failed: {payment.error}")  # Debug print
+           
+            print(f"Payment creation failed: {payment.error}") 
             return redirect('payment_failed')
 
-    # If not a POST request, render the subscription page
+    
     return render(request, 'subscription.html')
 
 def payment_execute(request):
@@ -66,7 +68,6 @@ def payment_execute(request):
     payer_id = request.GET.get('PayerID')
 
     if not payment_id or not payer_id:
-        # Handle the case where paymentId or PayerID is missing
         return redirect('payment_failed')
 
     try:
@@ -74,18 +75,34 @@ def payment_execute(request):
         
         if payment.execute({"payer_id": payer_id}):
             # Payment was successful
+            # Send confirmation email
+            user_subscription = UserSubscription.objects.get(user=request.user, plan__id=request.session.get('plan_id'))
+
+            # Email content
+            subject = f"Subscription Confirmation for {user_subscription.plan.name} Plan"
+            message = render_to_string('subscription_email.html', {
+                'username': request.user.username,
+                'plan_name': user_subscription.plan.name,
+                'amount': user_subscription.plan.price,
+                'start_date': user_subscription.start_date,
+                'end_date': user_subscription.end_date,
+            })
+
+            # Send email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [request.user.email],
+                fail_silently=False,
+            )
+
             return redirect('payment_completed')
         else:
-            # Payment failed
-            print(f"Payment execution failed: {payment.error}")
             return redirect('payment_failed')
     except paypalrestsdk.ResourceNotFound as e:
-        # Handle the case where the payment resource was not found
-        print(f"ResourceNotFound error: {e}")
         return redirect('payment_failed')
     except Exception as e:
-        # Handle other exceptions
-        print(f"An error occurred: {e}")
         return redirect('payment_failed')
 
 def payment_completed_view(request):
@@ -100,19 +117,19 @@ def subscription_error(request):
 def checkout_view(request):
     host = request.get_host()
     
-    # Default amount
+   
     total_amount = 0
 
     if request.method == 'POST':
         plan_id = request.POST.get('plan_id')
-        # Define plan amounts
+       
         plan_amounts = {
-            '1': 10.00,  # Basic Plan
-            '2': 20.00,  # Standard Plan
-            '3': 30.00,  # Premium Plan
+            '1': 10.00,            
+            '2': 20.00, 
+            '3': 30.00, 
         }
 
-        # Get the amount for the selected plan
+        
         total_amount = plan_amounts.get(plan_id, 0.00)
 
         # Create PayPal payment form
@@ -134,5 +151,5 @@ def checkout_view(request):
             'paypal_payment_button': paypal_payment_button,
         })
 
-    # If GET request, just render the subscription options page
+    
     return redirect('subscription')

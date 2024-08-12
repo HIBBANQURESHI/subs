@@ -11,7 +11,7 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">Choose a Subscription Plan</h1>
         <div class="row justify-content-center">
-            <!-- Subscription Box 1 -->
+            <!-- Basic Plan -->
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header">
@@ -20,9 +20,9 @@
                     <div class="card-body text-center">
                         <h1 class="card-title pricing-card-title">$10 <small class="text-muted">/ month</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>Basic Features</li>
-                            <li>Access to limited content</li>
-                            <li>Email Support</li>
+                            <li>Access to Basic Courses</li>
+                            <li>10 Quizzes per Month</li>
+                            <li>Standard Email Support</li>
                         </ul>
                         <form method="post" action="{% url 'checkout' %}">
                             {% csrf_token %}
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Subscription Box 2 -->
+            <!-- Standard Plan -->
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header">
@@ -41,8 +41,8 @@
                     <div class="card-body text-center">
                         <h1 class="card-title pricing-card-title">$20 <small class="text-muted">/ month</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>Standard Features</li>
-                            <li>Access to most content</li>
+                            <li>Access to All Courses</li>
+                            <li>Unlimited Quizzes</li>
                             <li>Priority Email Support</li>
                         </ul>
                         <form method="post" action="{% url 'checkout' %}">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Subscription Box 3 -->
+            <!-- Premium Plan -->
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header">
@@ -62,8 +62,8 @@
                     <div class="card-body text-center">
                         <h1 class="card-title pricing-card-title">$30 <small class="text-muted">/ month</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>All Features</li>
-                            <li>Access to all content</li>
+                            <li>Access to All Courses and Workshops</li>
+                            <li>Personalized Learning Path</li>
                             <li>24/7 Support</li>
                         </ul>
                         <form method="post" action="{% url 'checkout' %}">
