@@ -132,8 +132,3 @@ PAYPAL_MODE = 'sandbox'  # Or 'live'
 PAYPAL_RECEIVER_EMAIL ='sb-nf4ku32054043@business.example.com'
 PAYPAL_TEST = True 
 
-# Twilio configuration
-TWILIO_ACCOUNT_SID = 'AC0629dcfce3bbeb8f797a266b387b179c'
-
-TWILIO_PHONE_NUMBER = '+9203303193377'  # Your Twilio number
-
